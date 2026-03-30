@@ -7,6 +7,7 @@ import InterView from "./features/interview/pages/InterView";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import RootLayout from "./Layout";
+import Profile from "./pages/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
       {
         path: "contact",
         element: <Contact />,
+      },
+      {
+        path: "profile",
+        element: <Profile/>,
       },
     ],
   },

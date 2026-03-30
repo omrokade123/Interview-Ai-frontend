@@ -1,0 +1,256 @@
+// ─── Variables ─────────────────────────────────────────────────────────────────
+$bg-page:        #0d1117;
+$bg-footer:      #0a0e18;
+$bg-card:        #161b22;
+$border-color:   #2a3348;
+$text-primary:   #e6edf3;
+$text-muted:     #7d8590;
+$accent:         #ff2d78;
+$accent-alt:     #ff6b9d;
+$font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+// ─── Footer Container ──────────────────────────────────────────────────────────
+.page-footer {
+    width: 100%;
+    background-color: $bg-footer;
+    border-top: 1px solid $border-color;
+    padding-top: 1rem;
+    font-family: $font-stack;
+    color: $text-primary;
+}
+
+// ─── Footer Content Grid ──────────────────────────────────────────────────────
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 3rem;
+    box-sizing: border-box;
+}
+
+// ─── Footer Section ──────────────────────────────────────────────────────────
+.footer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
+    &__title {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: $text-primary;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        text-decoration: underline;
+        text-decoration-color: rgba($accent, 0.3);
+        text-underline-offset: 0.5rem;
+        text-decoration-thickness: 2px;
+    }
+}
+
+// ─── Brand Section ─────────────────────────────────────────────────────────
+.footer-brand {
+    max-width: 280px;
+
+    &__title {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.4rem;
+        font-weight: 900;
+        color: $text-primary;
+        letter-spacing: -0.5px;
+
+        &:hover {
+            background: linear-gradient(125deg, $accent 10%, $accent-alt 90%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+    }
+
+    &__tagline {
+        margin: 0 0 1.5rem 0;
+        font-size: 0.9rem;
+        color: $text-muted;
+        line-height: 1.6;
+    }
+}
+
+// ─── Social Links ──────────────────────────────────────────────────────────
+.footer-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba($accent, 0.08);
+    color: $accent;
+    border: 1px solid rgba($accent, 0.2);
+    transition: all 0.3s ease;
+    text-decoration: none;
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover {
+        background: linear-gradient(135deg, rgba($accent, 0.15) 0%, rgba($accent-alt, 0.05) 100%);
+        border-color: rgba($accent, 0.4);
+        color: $accent-alt;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($accent, 0.2);
+    }
+}
+
+// ─── Footer Links ──────────────────────────────────────────────────────────
+.footer-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    li {
+        margin: 0;
+        padding: 0;
+    }
+
+    a {
+        color: $text-muted;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        display: inline-block;
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, $accent, $accent-alt);
+            transition: width 0.3s ease;
+        }
+
+        &:hover {
+            color: $text-primary;
+            padding-left: 0.25rem;
+
+            &::before {
+                width: 100%;
+            }
+        }
+    }
+}
+
+// ─── Footer Bottom ─────────────────────────────────────────────────────────
+.footer-bottom {
+    border-top: 1px solid $border-color;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    background-color: rgba($accent, 0.02);
+    box-sizing: border-box;
+
+    @media (max-width: 640px) {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+.footer-copyright {
+    margin: 0;
+    font-size: 0.85rem;
+    color: $text-muted;
+}
+
+.footer-bottom__links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    a {
+        color: $text-muted;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: $accent;
+        }
+    }
+
+    .divider {
+        color: $border-color;
+    }
+}
+
+// ─── Responsive Design ─────────────────────────────────────────────────────
+@media (max-width: 1024px) {
+    .footer-content {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 2.5rem;
+        padding: 3rem 1.5rem 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        padding: 2.5rem 1.5rem 2rem;
+    }
+
+    .footer-brand {
+        grid-column: 1 / -1;
+        max-width: 100%;
+    }
+
+    .footer-section__title {
+        font-size: 0.85rem;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 1rem;
+    }
+
+    .footer-brand __title {
+        font-size: 1.2rem;
+    }
+
+    .footer-bottom {
+        padding: 1rem;
+        font-size: 0.75rem;
+    }
+
+    .footer-bottom__links {
+        gap: 0.75rem;
+        font-size: 0.75rem;
+    }
+}

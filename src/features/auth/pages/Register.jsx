@@ -15,8 +15,13 @@ const Register = () => {
     await handleRegister({username,email,password});
     navigate("/");
   };
-  if(loading){
-    return (<main><h1>Loading...</h1></main>)
+  if (loading) {
+    return (
+      <main className="loading-screen">
+        <div className="loading-screen__spinner" />
+        <p>Loading…</p>
+      </main>
+    );
   }
   return (
     <main>

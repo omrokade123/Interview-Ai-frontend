@@ -1,29 +1,57 @@
-// ── Shared Variables (mirrors home.scss theme) ────────────────────────────────
-$bg-page: #0d1117;
-$bg-card: #161b22;
-$bg-panel: #1c2230;
-$bg-input: #1e2535;
-$border-color: #2a3348;
-$text-primary: #e6edf3;
-$text-muted: #7d8590;
-$accent: #ff2d78;
-$font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+// ── Variables ─────────────────────────────────────────────────────────────────
+$bg-page:        #0d1117;
+$bg-card:        #161b22;
+$bg-panel:       #1c2230;
+$bg-input:       #1e2535;
+$border-color:   #2a3348;
+$text-primary:   #e6edf3;
+$text-muted:     #7d8590;
+$accent:         #ff2d78;
+$accent-dark:    #e6296c;
+$accent-alt:     #ff6b9d;
+$font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-// severity palette
-$severity-high: #ff4d4d;
+$severity-high:   #ff4d4d;
 $severity-medium: #f5a623;
-$severity-low: #3fb950;
+$severity-low:    #3fb950;
 
-// derived colors
-$text-muted-light: #9ba3af;
-
-*::-webkit-scrollbar {
-    display: none;
+// ── Keyframes ─────────────────────────────────────────────────────────────────
+@keyframes blobDrift1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    40%       { transform: translate(50px, -30px) scale(1.07); }
+    70%       { transform: translate(-25px, 20px) scale(0.95); }
+}
+@keyframes blobDrift2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    40%       { transform: translate(-40px, 25px) scale(1.05); }
+    70%       { transform: translate(20px, -15px) scale(0.97); }
+}
+@keyframes badgePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(0.6); }
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+@keyframes btnGlow {
+    to { transform: rotate(360deg); }
 }
 
-// ── Page Shell ────────────────────────────────────────────────────────────────
+// ── Scrollbar ─────────────────────────────────────────────────────────────────
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #2a3348 transparent;
+}
+*::-webkit-scrollbar       { width: 5px; height: 5px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background-color: $border-color; border-radius: 3px; }
+
+// ═════════════════════════════════════════════════════════════════════════════
+// PAGE SHELL
+// ═════════════════════════════════════════════════════════════════════════════
 .interview-page {
     width: 100%;
+    // KEY FIX: let the page be naturally tall — no overflow hidden
     min-height: 100vh;
     background-color: $bg-page;
     color: $text-primary;
@@ -31,53 +59,101 @@ $text-muted-light: #9ba3af;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
-// ── Hero Section ──────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// HERO
+// ═════════════════════════════════════════════════════════════════════════════
 .interview-hero {
+    position: relative;
     width: 100%;
-    background: linear-gradient(135deg, #1c2230 0%, #161b22 100%);
-    border-bottom: 2px solid $border-color;
-    padding: 4rem 2rem;
+    padding: 5rem 2rem 4rem;
     text-align: center;
     box-sizing: border-box;
+    overflow: hidden;
+
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba($accent, 0.09) 0%, transparent 65%),
+        linear-gradient(160deg, #1c2230 0%, #161b22 50%, #0d1117 100%);
+
+    border-bottom: 1px solid $border-color;
+
+    // bottom gradient fade
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 80px;
+        background: linear-gradient(to bottom, transparent, $bg-page);
+        pointer-events: none;
+    }
+
+    // Decorative blobs
+    .hero__blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+
+        &--1 {
+            width: 480px; height: 480px;
+            background: radial-gradient(circle, rgba($accent, 0.12) 0%, transparent 70%);
+            top: -120px; left: -80px;
+            animation: blobDrift1 18s ease-in-out infinite;
+        }
+        &--2 {
+            width: 360px; height: 360px;
+            background: radial-gradient(circle, rgba(#4a90e2, 0.09) 0%, transparent 70%);
+            bottom: 0; right: -60px;
+            animation: blobDrift2 22s ease-in-out infinite;
+        }
+    }
 
     .hero-content {
-        max-width: 1400px;
+        position: relative;
+        z-index: 2;
+        max-width: 860px;
         margin: 0 auto;
     }
 
     .hero-title {
-        font-size: 2.8rem;
+        font-size: clamp(2rem, 4.5vw, 3rem);
         font-weight: 900;
         color: $text-primary;
-        margin: 0 0 1rem;
-        letter-spacing: -1px;
-        background: linear-gradient(135deg, $text-primary, $accent);
+        margin: 0 0 1.1rem;
+        letter-spacing: -1.5px;
+        line-height: 1.1;
+        // GSAP starts at opacity:0 — do not set here
+        background: linear-gradient(135deg, $text-primary 30%, $accent 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
 
     .hero-subtitle {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: $text-muted;
         margin: 0;
-        line-height: 1.6;
+        line-height: 1.75;
+        max-width: 680px;
+        margin: 0 auto;
     }
 
     .hero-highlight {
         color: $accent;
-        font-weight: 600;
+        font-weight: 700;
+        -webkit-text-fill-color: $accent; // override gradient for this span
     }
 }
 
-.interview-header{
+// ── Sub-header ─────────────────────────────────────────────────────────────────
+.interview-header {
     width: 100%;
-    max-width: 100%;
-    margin: 2.5rem auto 0;
+    max-width: 1400px;
+    margin: 2rem auto 0;
     text-align: center;
     padding: 0 2rem;
     box-sizing: border-box;
@@ -92,48 +168,73 @@ $text-muted-light: #9ba3af;
     .subtitle {
         font-size: 0.95rem;
         color: $text-muted;
-        margin-top: 0.5rem;
+        margin-top: 0.4rem;
+
+        b { color: $text-primary; }
     }
 }
 
-// ── 3-Column Layout ───────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// 3-COLUMN LAYOUT
+// KEY FIX: remove fixed height / max-height so it grows with content
+// ═════════════════════════════════════════════════════════════════════════════
 .interview-layout {
     display: flex;
-    width: 100%;
+    width: calc(100% - 4rem);
     max-width: 1400px;
-    margin: 2rem auto;
+    margin: 2rem auto 3rem;
     background-color: $bg-card;
     border: 1px solid $border-color;
     border-radius: 1.2rem;
-    justify-content: space-between;
-    padding: 0 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    overflow: hidden;       // clip children to rounded corners
+    // Do NOT set height/max-height here — content drives height
     box-sizing: border-box;
+    transition: box-shadow 0.3s;
+
+    &:hover {
+        box-shadow: 0 12px 44px rgba($accent, 0.1);
+    }
 }
 
 .interview-divider {
     width: 1px;
     background-color: $border-color;
     flex-shrink: 0;
+    align-self: stretch;
 }
 
-// ── Left Nav ─────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// LEFT NAV
+// ═════════════════════════════════════════════════════════════════════════════
 .interview-nav {
-    width: 250px;
+    width: 230px;
     flex-shrink: 0;
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1.25rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 0.25rem;
+    // Stick nav to top while content scrolls
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
 
-
-
+    .nav-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
 
     &__label {
-        font-size: 0.7rem;
-        font-weight: 600;
+        font-size: 0.68rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
         color: $text-muted;
         padding: 0 0.75rem;
         margin-bottom: 0.5rem;
@@ -142,7 +243,7 @@ $text-muted-light: #9ba3af;
     &__item {
         display: flex;
         align-items: center;
-        gap: 0.6rem;
+        gap: 0.65rem;
         width: 100%;
         padding: 0.65rem 0.75rem;
         background: none;
@@ -153,20 +254,19 @@ $text-muted-light: #9ba3af;
         font-size: 0.875rem;
         cursor: pointer;
         text-align: left;
-        transition: background-color 0.15s, color 0.15s;
+        transition: background-color 0.15s, color 0.15s, transform 0.1s;
 
         &:hover {
             background-color: $bg-panel;
             color: $text-primary;
+            transform: translateX(2px);
         }
 
         &--active {
-            background-color: rgba($accent, 0.1);
+            background-color: rgba($accent, 0.12);
             color: $accent;
 
-            .interview-nav__icon svg {
-                stroke: $accent;
-            }
+            .interview-nav__icon svg { stroke: $accent; }
         }
     }
 
@@ -177,31 +277,21 @@ $text-muted-light: #9ba3af;
     }
 }
 
-// ── Center Content ────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// CENTER CONTENT
+// KEY FIX: remove max-height — use natural height so roadmap can grow
+// ═════════════════════════════════════════════════════════════════════════════
 .interview-content {
     flex: 1;
-    padding: 2rem 2.5rem;
-    overflow-y: auto;
-    min-height: initial;
-    max-height: calc(100vh - 5rem);
-    padding-bottom: 5rem;
-    align-items: flex-start;
-
-
-
-
-
-
-
-
-    section {
-        min-height: 100%;
-    }
+    padding: 2rem 2.5rem 3rem;
+    box-sizing: border-box;
+    min-width: 0; // prevent flex blowout
+    // NO max-height, NO overflow-y:auto here — page scroll handles it
 }
 
 .content-header {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 0.75rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
@@ -215,52 +305,64 @@ $text-muted-light: #9ba3af;
     }
 
     &__count {
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         color: $text-muted;
         background-color: $bg-panel;
-        padding: 0.15rem 0.6rem;
+        padding: 0.15rem 0.65rem;
         border-radius: 2rem;
         border: 1px solid $border-color;
     }
 }
 
-// ── Question Cards ────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// QUESTION CARDS
+// ═════════════════════════════════════════════════════════════════════════════
 .q-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.65rem;
 }
 
 .q-card {
     background-color: $bg-panel;
     border: 1px solid $border-color;
-    border-radius: 0.6rem;
+    border-radius: 0.7rem;
     overflow: hidden;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 
     &:hover {
-        border-color: #37405a; // Use a lighter hex value directly if $border-color is a CSS variable
+        border-color: rgba($accent, 0.3);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+
+    &--open {
+        border-color: rgba($accent, 0.35);
+        box-shadow: 0 4px 20px rgba($accent, 0.08);
     }
 
     &__header {
         display: flex;
         align-items: flex-start;
         gap: 0.75rem;
-        padding: 0.9rem 1rem;
+        padding: 0.95rem 1rem;
         cursor: pointer;
         user-select: none;
+        transition: background-color 0.15s;
+
+        &:hover { background-color: rgba($accent, 0.03); }
     }
 
     &__index {
         flex-shrink: 0;
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         font-weight: 700;
         color: $accent;
         background-color: rgba($accent, 0.1);
         border: 1px solid rgba($accent, 0.2);
         border-radius: 0.3rem;
-        padding: 0.15rem 0.4rem;
+        padding: 0.15rem 0.45rem;
         margin-top: 2px;
+        letter-spacing: 0.02em;
     }
 
     &__question {
@@ -269,14 +371,16 @@ $text-muted-light: #9ba3af;
         font-size: 0.9rem;
         font-weight: 500;
         color: $text-primary;
-        line-height: 1.5;
+        line-height: 1.55;
     }
 
     &__chevron {
         flex-shrink: 0;
         color: $text-muted;
-        transition: transform 0.2s;
-        margin-top: 2px;
+        transition: transform 0.25s ease, color 0.2s;
+        margin-top: 3px;
+        display: flex;
+        align-items: center;
 
         &--open {
             transform: rotate(180deg);
@@ -285,33 +389,33 @@ $text-muted-light: #9ba3af;
     }
 
     &__body {
-        padding: 0 1rem 1rem;
+        padding: 0.85rem 1rem 1rem;
+        border-top: 1px solid $border-color;
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
-        border-top: 1px solid $border-color;
-        padding-top: 0.75rem;
+        gap: 0.85rem;
+        background-color: rgba($bg-input, 0.4);
     }
 
     &__section {
         display: flex;
         flex-direction: column;
-        gap: 0.4rem;
+        gap: 0.45rem;
 
         p {
             margin: 0;
-            font-size: 0.835rem;
-            color: $text-muted-light;
-            line-height: 1.6;
+            font-size: 0.845rem;
+            color: #9ba3af;
+            line-height: 1.65;
         }
     }
 
     &__tag {
-        font-size: 0.68rem;
+        font-size: 0.66rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        padding: 0.15rem 0.5rem;
+        letter-spacing: 0.07em;
+        padding: 0.15rem 0.55rem;
         border-radius: 0.25rem;
         width: fit-content;
 
@@ -322,113 +426,138 @@ $text-muted-light: #9ba3af;
         }
 
         &--answer {
-            color: #3fb950;
-            background-color: rgba(#3fb950, 0.1);
-            border: 1px solid rgba(#3fb950, 0.2);
+            color: $severity-low;
+            background-color: rgba($severity-low, 0.1);
+            border: 1px solid rgba($severity-low, 0.2);
         }
     }
 }
 
-// ── Road Map ──────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// ROADMAP — rebuilt layout (no more ::before pseudo-line on parent)
+// KEY FIX: natural height, no overflow clipping
+// ═════════════════════════════════════════════════════════════════════════════
 .roadmap-list {
     display: flex;
     flex-direction: column;
     gap: 0;
-    position: relative;
-
-    // vertical timeline line
-    &::before {
-        content: '';
-        position: absolute;
-        left: 28px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: linear-gradient(to bottom, $accent, rgba($accent, 0.1));
-        border-radius: 1px;
-    }
 }
 
 .roadmap-day {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.75rem 0 0.75rem 3.5rem;
-    position: relative;
+    gap: 1rem;
+    // natural padding — no fixed heights
+    padding-bottom: 1.5rem;
 
-    // dot on timeline
-    &::before {
-        content: '';
-        position: absolute;
-        left: 21px;
-        top: 1.05rem;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background-color: $bg-card;
-        border: 2px solid $accent;
-    }
+    &:last-child {
+        padding-bottom: 0;
 
-    &__header {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-    }
-
-    &__badge {
-        font-size: 0.7rem;
-        font-weight: 700;
-        color: $accent;
-        background-color: rgba($accent, 0.1);
-        border: 1px solid rgba($accent, 0.25);
-        padding: 0.1rem 0.5rem;
-        border-radius: 2rem;
-    }
-
-    &__focus {
-        margin: 0;
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: $text-primary;
-    }
-
-    &__tasks {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-
-        li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-            font-size: 0.845rem;
-            color: $text-primary;
-            line-height: 1.5;
-        }
-    }
-
-    &__bullet {
-        flex-shrink: 0;
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background-color: $text-muted;
-        margin-top: 8px;
+        .roadmap-day__line { display: none; }
     }
 }
 
-// ── Right Sidebar ─────────────────────────────────────────────────────────────
-.interview-sidebar {
-    width: 280px;
-    flex-shrink: 0;
-    padding: 2rem 1.75rem;
+.roadmap-day__connector {
     display: flex;
     flex-direction: column;
-    
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 4px;
+}
+
+.roadmap-day__dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2.5px solid $accent;
+    background-color: rgba($accent, 0.18);
+    flex-shrink: 0;
+    box-shadow: 0 0 8px rgba($accent, 0.3);
+}
+
+.roadmap-day__line {
+    width: 2px;
+    flex: 1;
+    min-height: 24px;
+    background: linear-gradient(to bottom, $accent, rgba($accent, 0.12));
+    border-radius: 1px;
+    margin-top: 4px;
+}
+
+.roadmap-day__content {
+    flex: 1;
+    padding-bottom: 0.25rem;
+}
+
+.roadmap-day__header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.55rem;
+}
+
+.roadmap-day__badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: $accent;
+    background-color: rgba($accent, 0.1);
+    border: 1px solid rgba($accent, 0.25);
+    padding: 0.12rem 0.55rem;
+    border-radius: 2rem;
+    flex-shrink: 0;
+}
+
+.roadmap-day__focus {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $text-primary;
+}
+
+.roadmap-day__tasks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        font-size: 0.845rem;
+        color: #9ba3af;
+        line-height: 1.55;
+    }
+}
+
+.roadmap-day__bullet {
+    flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: $text-muted;
+    margin-top: 7px;
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// RIGHT SIDEBAR
+// ═════════════════════════════════════════════════════════════════════════════
+.interview-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
     gap: 1.25rem;
+    // Sticky so it stays in view while content scrolls
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .sidebar-divider {
@@ -436,11 +565,41 @@ $text-muted-light: #9ba3af;
     background-color: $border-color;
 }
 
-.back{
-    margin-top: auto;
-    padding-top: 1rem;
+// ── Animated Score Ring ────────────────────────────────────────────────────────
+.score-ring-wrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    align-self: center;
+
+    svg {
+        display: block;
+    }
 }
-// Match Score
+
+.score-ring-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+}
+
+.score-ring-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: $text-primary;
+    line-height: 1;
+}
+
+.score-ring-pct {
+    font-size: 0.72rem;
+    color: $text-muted;
+}
+
+// ── Match Score wrapper ────────────────────────────────────────────────────────
 .match-score {
     display: flex;
     flex-direction: column;
@@ -448,70 +607,37 @@ $text-muted-light: #9ba3af;
     gap: 0.6rem;
 
     &__label {
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.72rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.09em;
         color: $text-muted;
         margin: 0;
         align-self: flex-start;
     }
 
-    &__ring {
-        width: 110px;
-        height: 110px;
-        border-radius: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border: 5px solid;
-
-        &.score--high {
-            border-color: $severity-low;
-        }
-
-        &.score--mid {
-            border-color: $severity-medium;
-        }
-
-        &.score--low {
-            border-color: $severity-high;
-        }
-    }
-
-    &__value {
-        font-size: 1.9rem;
-        font-weight: 800;
-        color: $text-primary;
-        line-height: 1;
-    }
-
-    &__pct {
-        font-size: 0.75rem;
-        color: $text-muted;
-        margin-top: -2px;
-    }
-
     &__sub {
         margin: 0;
         font-size: 0.75rem;
-        color: $severity-low;
         text-align: center;
+
+        &.score--high { color: $severity-low; }
+        &.score--mid  { color: $severity-medium; }
+        &.score--low  { color: $severity-high; }
     }
 }
 
-// Skill Gaps
+// ── Skill Gaps ─────────────────────────────────────────────────────────────────
 .skill-gaps {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 
     &__label {
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.72rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.09em;
         color: $text-muted;
         margin: 0;
     }
@@ -519,7 +645,7 @@ $text-muted-light: #9ba3af;
     &__list {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: 0.45rem;
     }
 }
 
@@ -530,22 +656,83 @@ $text-muted-light: #9ba3af;
     border-radius: 0.4rem;
     border: 1px solid;
     cursor: default;
+    transition: transform 0.15s, box-shadow 0.15s;
 
-    &--high {
-        color: $severity-high;
-        background-color: rgba($severity-high, 0.1);
-        border-color: rgba($severity-high, 0.25);
-    }
+    &:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
 
-    &--medium {
-        color: $severity-medium;
-        background-color: rgba($severity-medium, 0.1);
-        border-color: rgba($severity-medium, 0.25);
-    }
+    &--high   { color: $severity-high;   background-color: rgba($severity-high,   0.1); border-color: rgba($severity-high,   0.3); }
+    &--medium { color: $severity-medium; background-color: rgba($severity-medium, 0.1); border-color: rgba($severity-medium, 0.3); }
+    &--low    { color: $severity-low;    background-color: rgba($severity-low,    0.1); border-color: rgba($severity-low,    0.3); }
+}
 
-    &--low {
-        color: $severity-low;
-        background-color: rgba($severity-low, 0.1);
-        border-color: rgba($severity-low, 0.25);
+// ── Back button area ───────────────────────────────────────────────────────────
+.back {
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// BUTTONS
+// ═════════════════════════════════════════════════════════════════════════════
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-family: $font-stack;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+
+    &:hover  { opacity: 0.9; transform: translateY(-2px); }
+    &:active { transform: scale(0.97); }
+}
+
+.primary-button {
+    background: linear-gradient(135deg, $accent 0%, $accent-dark 100%);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba($accent, 0.3);
+
+    &:hover { box-shadow: 0 8px 22px rgba($accent, 0.45); }
+
+    svg { animation: none; }
+    &:hover svg { animation: btnGlow 1.2s linear infinite; }
+}
+
+.back-button {
+    background-color: $bg-panel;
+    color: $text-primary;
+    border: 1px solid $border-color;
+
+    &:hover { border-color: rgba($accent, 0.4); background-color: $bg-input; }
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// LOADING SCREEN
+// ═════════════════════════════════════════════════════════════════════════════
+.loading-screen {
+    width: 100%;
+    min-height: 100vh;
+    background-color: $bg-page;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    font-family: $font-stack;
+    color: $text-muted;
+    font-size: 0.9rem;
+
+    &__spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid $border-color;
+        border-top-color: $accent;
+        border-radius: 50%;
+        animation: spin 0.75s linear infinite;
     }
 }
