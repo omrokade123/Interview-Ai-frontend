@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react'
 import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
@@ -13,6 +12,7 @@ const Home = () => {
     const { loading, generateReport, reports } = useInterview()
     const [jobDescription, setJobDescription] = useState("")
     const [selfDescription, setSelfDescription] = useState("")
+    const [uploadedFile, setUploadedFile]       = useState(null)   // ← NEW
     const resumeInputRef = useRef()
     const navigate = useNavigate()
 
@@ -27,99 +27,81 @@ const Home = () => {
     const formTitleRef     = useRef()
     const interviewCardRef = useRef()
     const recentReportsRef = useRef()
-    
 
     useEffect(() => {
-        // ── Guard: don't animate if refs aren't mounted ───────────────────
         if (!heroBadgeRef.current) return
 
-        // ── 1. HERO ENTRANCE (on load, no scroll trigger) ─────────────────
         const heroTl = gsap.timeline({ defaults: { ease: 'expo.out' } })
 
-        // Set initial hidden states first
         gsap.set(heroBadgeRef.current, { opacity: 0, y: -30 })
         gsap.set(heroH1Ref.current.querySelectorAll('.hero-line'), {
             opacity: 0,
             x: (i) => (i % 2 === 0 ? -100 : 100),
         })
-        gsap.set(heroSubRef.current,          { opacity: 0, y: 25 })
-        gsap.set(heroStatsRef.current,        { opacity: 0, y: 30 })
-        gsap.set(heroScrollRef.current,       { opacity: 0, y: 12 })
+        gsap.set(heroSubRef.current,    { opacity: 0, y: 25 })
+        gsap.set(heroStatsRef.current,  { opacity: 0, y: 30 })
+        gsap.set(heroScrollRef.current, { opacity: 0, y: 12 })
 
-        // Animate hero elements in sequence
         heroTl
             .to(heroBadgeRef.current, { opacity: 1, y: 0, duration: 0.65 }, 0.1)
-            .to(
-                heroH1Ref.current.querySelectorAll('.hero-line'),
-                { opacity: 1, x: 0, duration: 0.8, stagger: 0.14, ease: 'expo.out' },
-                0.25
-            )
+            .to(heroH1Ref.current.querySelectorAll('.hero-line'),
+                { opacity: 1, x: 0, duration: 0.8, stagger: 0.14, ease: 'expo.out' }, 0.25)
             .to(heroSubRef.current,    { opacity: 1, y: 0, duration: 0.65 }, 0.65)
             .to(heroStatsRef.current,  { opacity: 1, y: 0, duration: 0.6  }, 0.82)
             .to(heroScrollRef.current, { opacity: 1, y: 0, duration: 0.5  }, 1.1)
 
-        // ── 2. SCROLL-TRIGGERED ANIMATIONS ────────────────────────────────
-
-        // Form section title — slides up when scrolled into view
         gsap.set(formTitleRef.current, { opacity: 0, y: 40 })
         gsap.to(formTitleRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.75,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: formTitleRef.current,
-                start: 'top 85%',
-                once: true,
-            },
+            opacity: 1, y: 0, duration: 0.75, ease: 'power3.out',
+            scrollTrigger: { trigger: formTitleRef.current, start: 'top 85%', once: true },
         })
 
-        // Card — 3-D perspective flip entry
         gsap.set(interviewCardRef.current, {
-            opacity: 0,
-            y: 80,
-            rotationX: 20,
-            rotationZ: -3,
-            transformPerspective: 900,
-            transformOrigin: '50% 110%',
+            opacity: 0, y: 80, rotationX: 20, rotationZ: -3,
+            transformPerspective: 900, transformOrigin: '50% 110%',
         })
         gsap.to(interviewCardRef.current, {
-            opacity: 1,
-            y: 0,
-            rotationX: 0,
-            rotationZ: 0,
-            duration: 1.0,
-            ease: 'power4.out',
-            scrollTrigger: {
-                trigger: interviewCardRef.current,
-                start: 'top 88%',
-                once: true,
-            },
+            opacity: 1, y: 0, rotationX: 0, rotationZ: 0,
+            duration: 1.0, ease: 'power4.out',
+            scrollTrigger: { trigger: interviewCardRef.current, start: 'top 88%', once: true },
         })
 
-        // Recent reports stagger (runs only if reports exist)
         if (recentReportsRef.current) {
             const items = recentReportsRef.current.querySelectorAll('.report-item')
             gsap.set(items, { opacity: 0, y: 35, rotationZ: -1.5 })
             gsap.to(items, {
-                opacity: 1,
-                y: 0,
-                rotationZ: 0,
-                duration: 0.6,
-                stagger: 0.1,
-                ease: 'back.out(1.3)',
-                scrollTrigger: {
-                    trigger: recentReportsRef.current,
-                    start: 'top 85%',
-                    once: true,
-                },
+                opacity: 1, y: 0, rotationZ: 0, duration: 0.6, stagger: 0.1, ease: 'back.out(1.3)',
+                scrollTrigger: { trigger: recentReportsRef.current, start: 'top 85%', once: true },
             })
         }
 
-        return () => {
-            ScrollTrigger.getAll().forEach(t => t.kill())
-        }
-    }, [loading]) // re-run after loading resolves so refs are in the DOM
+        return () => { ScrollTrigger.getAll().forEach(t => t.kill()) }
+    }, [loading])
+
+    // ── File helpers ──────────────────────────────────────────────────────
+    const formatFileSize = (bytes) => {
+        if (bytes < 1024) return `${bytes} B`
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+    }
+
+    const getFileIcon = (name) => {
+        const ext = name.split('.').pop().toLowerCase()
+        return ext === 'pdf' ? 'PDF' : 'DOC'
+    }
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        setUploadedFile(file)
+    }
+
+    const handleRemoveFile = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setUploadedFile(null)
+        if (resumeInputRef.current) resumeInputRef.current.value = ''
+    }
 
     const handleGenerateReport = async () => {
         const resumeFile = resumeInputRef.current?.files[0]
@@ -127,7 +109,6 @@ const Home = () => {
         navigate(`/interview/${data._id}`)
     }
 
-    // ── Loading state — minimal, non-blocking spinner ─────────────────────
     if (loading) {
         return (
             <main className='loading-screen'>
@@ -140,39 +121,30 @@ const Home = () => {
     return (
         <div className='home-page'>
 
-            {/* ══════════════════════════════════════
-                HERO — full viewport
-            ══════════════════════════════════════ */}
+            {/* ── HERO ─────────────────────────────────────────────────── */}
             <section className='hero'>
-
-                {/* Decorative blobs */}
                 <div className='hero__blob hero__blob--1' aria-hidden='true' />
                 <div className='hero__blob hero__blob--2' aria-hidden='true' />
                 <div className='hero__blob hero__blob--3' aria-hidden='true' />
 
                 <div className='hero__content'>
-
-                    {/* Badge */}
                     <div className='hero__badge' ref={heroBadgeRef}>
                         <span className='hero__badge-dot' />
                         AI-Powered Interview Prep
                     </div>
 
-                    {/* Headline — 3 lines, each animated separately */}
                     <h1 className='hero__h1' ref={heroH1Ref}>
                         <span className='hero-line'>Crack Every</span>
                         <span className='hero-line hero-line--accent'>Interview</span>
                         <span className='hero-line'>With Confidence</span>
                     </h1>
 
-                    {/* Subtitle */}
                     <p className='hero__sub' ref={heroSubRef}>
                         Drop in a job description, upload your resume, and let our AI generate
                         a hyper-personalised strategy — technical questions, behavioural prep,
                         skill gap analysis, and a day-by-day roadmap. In 30 seconds.
                     </p>
 
-                    {/* Stats */}
                     <div className='hero__stats' ref={heroStatsRef}>
                         <div className='hero-stat'>
                             <span className='hero-stat__number'>10k+</span>
@@ -189,10 +161,8 @@ const Home = () => {
                             <span className='hero-stat__label'>Generation Time</span>
                         </div>
                     </div>
-
                 </div>
 
-                {/* Scroll hint */}
                 <div className='hero__scroll' ref={heroScrollRef} aria-hidden='true'>
                     <span>Scroll to build your plan</span>
                     <div className='hero__scroll-mouse'>
@@ -201,9 +171,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* ══════════════════════════════════════
-                FORM SECTION
-            ══════════════════════════════════════ */}
+            {/* ── FORM SECTION ─────────────────────────────────────────── */}
             <div className='form-section'>
 
                 <div className='form-section__title' ref={formTitleRef}>
@@ -211,7 +179,6 @@ const Home = () => {
                     <p>Let our AI analyze the job requirements and your unique profile to build a winning strategy.</p>
                 </div>
 
-                {/* Main Card */}
                 <div className='interview-card' ref={interviewCardRef}>
                     <div className='interview-card__body'>
 
@@ -244,19 +211,76 @@ const Home = () => {
                                 <h2>Your Profile</h2>
                             </div>
 
+                            {/* ── Upload Resume ── */}
                             <div className='upload-section'>
                                 <label className='section-label'>
                                     Upload Resume
                                     <span className='badge badge--best'>Best Results</span>
                                 </label>
-                                <label className='dropzone' htmlFor='resume'>
-                                    <span className='dropzone__icon'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>
-                                    </span>
-                                    <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
-                                    <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
-                                    <input ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
-                                </label>
+
+                                {/* Show file card if uploaded, else show dropzone */}
+                                {uploadedFile ? (
+                                    <div className='file-card'>
+                                        <div className='file-card__icon-wrap'>
+                                            <span className='file-card__type'>
+                                                {getFileIcon(uploadedFile.name)}
+                                            </span>
+                                        </div>
+                                        <div className='file-card__info'>
+                                            <p className='file-card__name'>{uploadedFile.name}</p>
+                                            <p className='file-card__meta'>
+                                                {formatFileSize(uploadedFile.size)} &bull; Ready to use
+                                            </p>
+                                        </div>
+                                        <div className='file-card__actions'>
+                                            <span className='file-card__check'>
+                                                {/* checkmark */}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polyline points="20 6 9 17 4 12" />
+                                                </svg>
+                                            </span>
+                                            <button
+                                                className='file-card__remove'
+                                                onClick={handleRemoveFile}
+                                                title='Remove file'
+                                                type='button'
+                                            >
+                                                {/* X */}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <line x1="18" y1="6" x2="6" y2="18" />
+                                                    <line x1="6" y1="6" x2="18" y2="18" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        {/* Hidden input kept so the file is still accessible */}
+                                        <input
+                                            ref={resumeInputRef}
+                                            hidden
+                                            type='file'
+                                            id='resume'
+                                            name='resume'
+                                            accept='.pdf,.docx'
+                                            onChange={handleFileChange}
+                                        />
+                                    </div>
+                                ) : (
+                                    <label className='dropzone' htmlFor='resume'>
+                                        <span className='dropzone__icon'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>
+                                        </span>
+                                        <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
+                                        <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
+                                        <input
+                                            ref={resumeInputRef}
+                                            hidden
+                                            type='file'
+                                            id='resume'
+                                            name='resume'
+                                            accept='.pdf,.docx'
+                                            onChange={handleFileChange}
+                                        />
+                                    </label>
+                                )}
                             </div>
 
                             <div className='or-divider'><span>OR</span></div>
