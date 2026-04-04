@@ -419,12 +419,32 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
 // ═════════════════════════════════════════════════════════════════════════════
 // RESPONSIVE
 // ═════════════════════════════════════════════════════════════════════════════
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .about-hero {
-        padding: 3rem 1rem 2rem;
+        min-height: 50vh;
+        padding: 3rem 1.5rem 2.5rem;
+
+        &__blob {
+            &--1 {
+                width: 400px;
+                height: 400px;
+                top: -100px;
+                left: -80px;
+            }
+            &--2 {
+                width: 280px;
+                height: 280px;
+                bottom: 60px;
+                right: -60px;
+            }
+            &--3 {
+                width: 220px;
+                height: 220px;
+            }
+        }
 
         &__h1 {
-            font-size: clamp(2rem, 4.5vw, 2.8rem);
+            font-size: clamp(2rem, 5vw, 3.2rem);
         }
 
         &__sub {
@@ -433,8 +453,9 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
     }
 
     .about-content {
-        margin: -30px 1rem 0;
-        padding: 1.5rem;
+        max-width: 100%;
+        padding: 1.5rem 1.5rem;
+        margin: -40px 1.5rem 0;
         gap: 3rem;
     }
 
@@ -442,45 +463,234 @@ $font-stack:     system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Robot
         padding: 2rem;
     }
 
+    .section-title {
+        font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    }
+
+    .values-grid,
+    .team-grid,
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-hero {
+        min-height: 45vh;
+        padding: 2rem 1rem 1.5rem;
+
+        &__blob {
+            &--1 {
+                width: 300px;
+                height: 300px;
+                top: -80px;
+                left: -60px;
+            }
+            &--2 {
+                width: 200px;
+                height: 200px;
+                bottom: 40px;
+                right: -50px;
+            }
+            &--3 {
+                width: 160px;
+                height: 160px;
+            }
+        }
+
+        &__h1 {
+            font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+            margin-bottom: 0.8rem;
+        }
+
+        &__sub {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    }
+
+    .about-content {
+        padding: 1.2rem 1rem;
+        margin: -30px 1rem 0;
+        gap: 2.5rem;
+    }
+
+    .mission-card {
+        padding: 1.5rem;
+        border-radius: 0.8rem;
+
+        &__header {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        &__content {
+            font-size: 0.9rem;
+        }
+    }
+
+    .section-title {
+        font-size: clamp(1.3rem, 3vw, 2rem);
+        margin-bottom: 1.5rem;
+    }
+
     .values-grid,
     .team-grid,
     .features-grid {
         grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    .value-card,
+    .team-card {
+        padding: 1.2rem;
+
+        h3 {
+            font-size: 1rem;
+        }
+
+        p {
+            font-size: 0.8rem;
+        }
+    }
+
+    .team-card__avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+
+    .feature-item {
+        padding-left: 3rem;
+
+        .feature-number {
+            font-size: 1.8rem;
+        }
     }
 }
 
 @media (max-width: 480px) {
     .about-hero {
+        min-height: 40vh;
+        padding: 1.5rem 0.8rem 1rem;
+
+        &__blob {
+            &--1 {
+                width: 220px;
+                height: 220px;
+                top: -60px;
+                left: -50px;
+            }
+            &--2 {
+                width: 150px;
+                height: 150px;
+                bottom: 30px;
+                right: -40px;
+            }
+            &--3 {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
         &__h1 {
-            font-size: 1.75rem;
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
         }
 
         &__sub {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
     }
 
     .about-content {
-        padding: 1rem;
+        padding: 1rem 0.8rem;
+        margin: -25px 0.8rem 0;
+        gap: 2rem;
     }
 
     .mission-card {
-        padding: 1.5rem;
+        padding: 1.2rem;
+
+        &__header {
+            h2 {
+                font-size: 1.1rem;
+            }
+        }
+
+        &__content {
+            font-size: 0.85rem;
+        }
     }
 
     .section-title {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
+        font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+        margin-bottom: 1.2rem;
+    }
+
+    .values-grid,
+    .team-grid,
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .value-card {
+        padding: 1rem;
+
+        .value-icon {
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-size: 0.9rem;
+        }
+
+        p {
+            font-size: 0.75rem;
+        }
+    }
+
+    .team-card {
+        padding: 1rem;
+
+        &__avatar {
+            width: 50px;
+            height: 50px;
+            font-size: 1.3rem;
+        }
+
+        &__name {
+            font-size: 0.95rem;
+        }
+
+        &__role {
+            font-size: 0.75rem;
+        }
+
+        &__bio {
+            font-size: 0.75rem;
+        }
     }
 
     .feature-item {
-        padding-left: 0;
+        padding-left: 2.5rem;
 
         .feature-number {
-            position: relative;
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            font-size: 0.9rem;
+        }
+
+        p {
+            font-size: 0.8rem;
         }
     }
 }

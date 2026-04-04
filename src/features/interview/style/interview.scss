@@ -433,10 +433,7 @@ $severity-low:    #3fb950;
     }
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
-// ROADMAP — rebuilt layout (no more ::before pseudo-line on parent)
-// KEY FIX: natural height, no overflow clipping
-// ═════════════════════════════════════════════════════════════════════════════
+
 .roadmap-list {
     display: flex;
     flex-direction: column;
@@ -734,5 +731,757 @@ $severity-low:    #3fb950;
         border-top-color: $accent;
         border-radius: 50%;
         animation: spin 0.75s linear infinite;
+    }
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// TABLET RESPONSIVENESS (768px - 1024px)
+// ═════════════════════════════════════════════════════════════════════════════
+@media (max-width: 1024px) {
+    .interview-hero {
+        padding: 3rem 1.5rem 2.5rem;
+
+        .hero-title {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+    }
+
+    .interview-header {
+        padding: 0 1.5rem;
+        margin: 1.5rem auto 0;
+    }
+
+    .interview-layout {
+        width: calc(100% - 2rem);
+        margin: 1.5rem auto 2rem;
+        flex-direction: column;
+        border-radius: 1rem;
+    }
+
+    .interview-divider {
+        width: 100%;
+        height: 1px;
+        display: none;
+    }
+
+    .interview-nav {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        position: relative;
+        top: auto;
+        align-self: auto;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 0.5rem;
+        border-bottom: 1px solid $border-color;
+        -webkit-overflow-scrolling: touch;
+
+        .nav-content {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        &__label {
+            display: none;
+        }
+
+        &__item {
+            white-space: nowrap;
+            padding: 0.5rem 0.9rem;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+
+            svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+    }
+
+    .interview-content {
+        padding: 1.5rem 1.5rem 2rem;
+        flex: 1;
+        border-bottom: 1px solid $border-color;
+    }
+
+    .content-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+
+        h2 {
+            font-size: 1.2rem;
+        }
+    }
+
+    .q-card {
+        border-radius: 0.6rem;
+
+        &__question {
+            font-size: 0.9rem;
+        }
+
+        &__header {
+            padding: 0.8rem;
+        }
+
+        &__body {
+            padding: 0.9rem 0.8rem;
+        }
+
+        &__section {
+            padding: 0.8rem 0;
+        }
+    }
+
+    .interview-sidebar {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        position: relative;
+        top: auto;
+        align-self: auto;
+        padding: 1.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+
+    .match-score {
+        width: 100%;
+        min-width: auto;
+        flex-direction: row;
+        align-items: center;
+        gap: 1.5rem;
+
+        &__label {
+            font-size: 0.75rem;
+        }
+    }
+
+    .score-ring-wrap {
+        width: 100px;
+        height: 100px;
+
+        svg {
+            width: 100px;
+            height: 100px;
+        }
+    }
+
+    .skill-gaps {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+
+        &__label {
+            white-space: nowrap;
+            font-size: 0.75rem;
+        }
+
+        &__list {
+            flex: 1;
+        }
+    }
+
+    .back {
+        width: 100%;
+        margin-top: 0.5rem;
+
+        .back-button {
+            width: 100%;
+        }
+    }
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// MOBILE RESPONSIVENESS (max-width: 768px)
+// ═════════════════════════════════════════════════════════════════════════════
+@media (max-width: 768px) {
+    .interview-page {
+        overflow-x: hidden;
+    }
+
+    .interview-hero {
+        padding: 2.5rem 1rem 2rem;
+        border-bottom: 1px solid $border-color;
+
+        .hero__blob {
+            &--1 {
+                width: 300px;
+                height: 300px;
+                top: -100px;
+                left: -80px;
+            }
+            &--2 {
+                width: 220px;
+                height: 220px;
+                bottom: -50px;
+                right: -60px;
+            }
+        }
+
+        .hero-title {
+            font-size: clamp(1.3rem, 2.5vw, 2rem);
+            margin: 0 0 0.8rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 100%;
+        }
+    }
+
+    .interview-header {
+        margin: 1rem auto 0;
+        padding: 1rem 1rem 0;
+        max-width: 100%;
+
+        h3 {
+            font-size: 1rem;
+        }
+
+        p {
+            font-size: 0.8rem;
+        }
+    }
+
+    .interview-layout {
+        width: calc(100% - 1rem);
+        margin: 1rem 0.5rem 1.5rem;
+        border-radius: 0.8rem;
+    }
+
+    .interview-nav {
+        width: 100%;
+        height: auto;
+        max-height: auto;
+        padding: 0;
+        position: sticky;
+        top: 55px; // Below navbar
+        align-self: auto;
+        flex-direction: column;
+        overflow-x: visible;
+        overflow-y: visible;
+        gap: 0;
+        border-bottom: 1px solid $border-color;
+        background-color: rgba($bg-card, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 10;
+        -webkit-overflow-scrolling: auto;
+
+        .nav-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+            width: 100%;
+            padding: 0.75rem 0.5rem;
+        }
+
+        &__label {
+            display: none;
+        }
+
+        &__item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.85rem 0.4rem;
+            font-size: 0.7rem;
+            border-radius: 0.4rem;
+            white-space: normal;
+            text-align: center;
+            flex-shrink: 0;
+            color: $text-muted;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+
+            svg {
+                width: 18px;
+                height: 18px;
+                flex-shrink: 0;
+            }
+
+            &:hover {
+                background-color: rgba($accent, 0.08);
+                color: $text-primary;
+            }
+
+            &--active {
+                background-color: rgba($accent, 0.15);
+                color: $accent;
+                border-color: $accent;
+
+                svg {
+                    stroke: $accent;
+                }
+            }
+        }
+    }
+
+    .interview-nav ~ .primary-button {
+        // Button inside nav
+        width: calc(100% - 1rem);
+        margin: 0.75rem 0.5rem;
+        padding: 0.65rem 0.8rem;
+        font-size: 0.75rem;
+    }
+
+    .interview-content {
+        padding: 1.25rem 1rem 1.5rem;
+    }
+
+    .content-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        gap: 0.5rem;
+
+        h2 {
+            font-size: 1rem;
+        }
+
+        p {
+            font-size: 0.8rem;
+        }
+    }
+
+    .q-list {
+        gap: 0.75rem;
+    }
+
+    .q-card {
+        border-radius: 0.6rem;
+        margin-bottom: 0.5rem;
+
+        &__header {
+            padding: 0.8rem;
+        }
+
+        &__index {
+            font-size: 0.75rem;
+            min-width: 28px;
+        }
+
+        &__question {
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        &__chevron {
+            width: 16px;
+            height: 16px;
+            min-width: 16px;
+
+            svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        &__body {
+            padding: 1rem 0.8rem;
+        }
+
+        &__section {
+            padding: 0.75rem 0;
+
+            p {
+                font-size: 0.8rem;
+                line-height: 1.5;
+            }
+        }
+
+        &__tag {
+            font-size: 0.65rem;
+            padding: 0.3rem 0.5rem;
+        }
+    }
+
+    .roadmap-list {
+        gap: 1rem;
+    }
+
+    .roadmap-day {
+        &__header {
+            margin-bottom: 0.75rem;
+        }
+
+        &__badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        &__focus {
+            font-size: 0.9rem;
+            margin: 0.3rem 0 0;
+        }
+
+        &__tasks {
+            padding-left: 0.5rem;
+
+            li {
+                font-size: 0.8rem;
+                margin-bottom: 0.3rem;
+            }
+        }
+    }
+
+    .interview-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: auto;
+        align-self: auto;
+        padding: 1.25rem 1rem;
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: stretch;
+        flex-wrap: wrap;
+    }
+
+    .match-score {
+        flex: 0 1 45%;
+        min-width: 160px;
+
+        &__label {
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+        }
+
+        &__value {
+            font-size: 0.9rem;
+        }
+    }
+
+    .score-ring-wrap {
+        width: 80px;
+        height: 80px;
+
+        svg {
+            width: 80px;
+            height: 80px;
+        }
+    }
+
+    .score-ring-value {
+        font-size: 1.5rem;
+    }
+
+    .score-ring-pct {
+        font-size: 0.6rem;
+    }
+
+    .skill-gaps {
+        flex: 1 1 100%;
+        min-width: 100%;
+
+        h3 {
+            font-size: 0.85rem;
+            margin-bottom: 0.6rem;
+        }
+    }
+
+    .skill-tag {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.6rem;
+        margin-right: 0.4rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .back {
+        width: 100%;
+        margin-top: 1rem;
+
+        .back-button {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    .button {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    .primary-button {
+        width: 100%;
+    }
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// SMALL MOBILE (max-width: 480px)
+// ═════════════════════════════════════════════════════════════════════════════
+@media (max-width: 480px) {
+    .interview-page {
+        overflow-x: hidden;
+    }
+
+    .interview-hero {
+        padding: 1.5rem 0.8rem 1.2rem;
+
+        &::after {
+            height: 60px;
+        }
+
+        .hero__blob {
+            &--1 {
+                width: 220px;
+                height: 220px;
+                top: -80px;
+                left: -60px;
+            }
+            &--2 {
+                width: 160px;
+                height: 160px;
+                bottom: -40px;
+                right: -50px;
+            }
+        }
+
+        .hero-title {
+            font-size: clamp(1.1rem, 2vw, 1.6rem);
+            margin: 0 0 0.6rem;
+            letter-spacing: -0.3px;
+        }
+
+        .hero-subtitle {
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+    }
+
+    .interview-header {
+        margin: 0.8rem auto 0;
+        padding: 0.8rem 0.8rem 0;
+
+        h3 {
+            font-size: 0.9rem;
+        }
+
+        p {
+            font-size: 0.75rem;
+        }
+    }
+
+    .interview-layout {
+        width: calc(100% - 0.8rem);
+        margin: 0.8rem 0.4rem 1rem;
+        border-radius: 0.6rem;
+    }
+
+    .interview-nav {
+        padding: 0.8rem 0.6rem;
+        gap: 0.2rem;
+        overflow-x: auto;
+
+        &__item {
+            padding: 0.4rem 0.6rem;
+            font-size: 0.7rem;
+            gap: 0.3rem;
+
+            svg {
+                width: 12px;
+                height: 12px;
+            }
+        }
+    }
+
+    .interview-content {
+        padding: 1rem 0.8rem 1.2rem;
+    }
+
+    .content-header {
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.5rem;
+        gap: 0.3rem;
+
+        h2 {
+            font-size: 0.9rem;
+        }
+
+        p {
+            font-size: 0.7rem;
+        }
+    }
+
+    .q-list {
+        gap: 0.5rem;
+    }
+
+    .q-card {
+        border-radius: 0.5rem;
+        margin-bottom: 0.4rem;
+
+        &__header {
+            padding: 0.6rem;
+            gap: 0.4rem;
+        }
+
+        &__index {
+            font-size: 0.7rem;
+            min-width: 24px;
+        }
+
+        &__question {
+            font-size: 0.8rem;
+            margin: 0;
+        }
+
+        &__chevron {
+            width: 14px;
+            height: 14px;
+            min-width: 14px;
+
+            svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
+        &__body {
+            padding: 0.8rem 0.6rem;
+        }
+
+        &__section {
+            padding: 0.6rem 0;
+
+            p {
+                font-size: 0.75rem;
+                line-height: 1.4;
+            }
+        }
+
+        &__tag {
+            font-size: 0.6rem;
+            padding: 0.25rem 0.4rem;
+        }
+    }
+
+    .roadmap-list {
+        gap: 0.8rem;
+    }
+
+    .roadmap-day {
+        &__connector {
+            width: 20px;
+            min-width: 20px;
+        }
+
+        &__dot {
+            width: 10px;
+            height: 10px;
+        }
+
+        &__header {
+            margin-bottom: 0.5rem;
+        }
+
+        &__badge {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.4rem;
+        }
+
+        &__focus {
+            font-size: 0.85rem;
+            margin: 0.2rem 0 0;
+        }
+
+        &__tasks {
+            padding-left: 0.3rem;
+
+            li {
+                font-size: 0.75rem;
+                line-height: 1.4;
+                margin-bottom: 0.2rem;
+            }
+        }
+
+        &__bullet {
+            width: 4px;
+            height: 4px;
+        }
+    }
+
+    .interview-sidebar {
+        padding: 1rem 0.8rem;
+        gap: 0.75rem;
+    }
+
+    .match-score {
+        flex: 0 1 auto;
+        min-width: 140px;
+
+        &__label {
+            font-size: 0.65rem;
+        }
+
+        &__value {
+            font-size: 0.8rem;
+        }
+    }
+
+    .score-ring-wrap {
+        width: 70px;
+        height: 70px;
+
+        svg {
+            width: 70px;
+            height: 70px;
+        }
+    }
+
+    .score-ring-value {
+        font-size: 1.3rem;
+    }
+
+    .score-ring-pct {
+        font-size: 0.55rem;
+    }
+
+    .skill-gaps {
+        flex: 1 1 100%;
+
+        h3 {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .skill-tag {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.5rem;
+        margin-right: 0.3rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .back {
+        width: 100%;
+        margin-top: 0.8rem;
+
+        .back-button {
+            width: 100%;
+            padding: 0.5rem 0.8rem;
+            font-size: 0.8rem;
+        }
+    }
+
+    .button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
     }
 }

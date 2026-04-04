@@ -27,6 +27,12 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
         margin: 0;
         letter-spacing: -0.5px;
 
+        h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
         &:hover {
             color: $accent;
             transition: color 0.3s ease;
@@ -147,6 +153,204 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// HAMBURGER MENU (Hidden on desktop)
+// ────────────────────────────────────────────────────────────────────────────
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+
+    .hamburger__line {
+        width: 24px;
+        height: 2.5px;
+        background-color: $text-primary;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+
+    &--active {
+        .hamburger__line {
+            &:nth-child(1) {
+                transform: rotate(45deg) translate(7px, 7px);
+            }
+            &:nth-child(2) {
+                opacity: 0;
+            }
+            &:nth-child(3) {
+                transform: rotate(-45deg) translate(8px, -8px);
+            }
+        }
+    }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// TABLET RESPONSIVENESS (768px - 1024px)
+// ────────────────────────────────────────────────────────────────────────────
+@media (max-width: 1024px) {
+    .nav {
+        padding: 0.75rem 1.5rem;
+
+        .nav-brand h1 {
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            gap: 1.5rem;
+
+            li a {
+                font-size: 0.85rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            &.nav-user {
+                margin-left: 0.8rem;
+            }
+        }
+    }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// MOBILE RESPONSIVENESS (max-width: 768px)
+// ────────────────────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+    .nav {
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
+
+        .nav-brand h1 {
+            font-size: 1.1rem;
+        }
+
+        .hamburger {
+            display: flex;
+        }
+
+        .nav-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: $bg-nav;
+            border-bottom: 1px solid $border-color;
+            flex-direction: column;
+            gap: 0;
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+
+            &--active {
+                max-height: 500px;
+                overflow-y: auto;
+            }
+
+            li {
+                width: 100%;
+                margin: 0;
+
+                a {
+                    width: 100%;
+                    display: block;
+                    padding: 1rem;
+                    border-radius: 0;
+                    border-bottom: none;
+                    font-size: 0.9rem;
+                    border-bottom: 1px solid rgba($border-color, 0.5);
+
+                    &:hover {
+                        background-color: rgba($accent, 0.1);
+                        border-bottom: 1px solid rgba($border-color, 0.5);
+                    }
+
+                    &.active {
+                        background-color: rgba($accent, 0.15);
+                        border-bottom: 1px solid rgba($border-color, 0.5);
+                        color: $accent;
+                    }
+                }
+
+                &.nav-user {
+                    margin-left: 0;
+                    padding: 0.5rem 1rem;
+                    border-bottom: 1px solid rgba($border-color, 0.5);
+
+                    .user-avatar {
+                        width: 32px;
+                        height: 32px;
+                        font-size: 0.9rem;
+                    }
+
+                    .dropdown-menu {
+                        position: static;
+                        background-color: rgba($bg-nav, 0.95);
+                        border: none;
+                        border-radius: 0;
+                        margin-top: 0.5rem;
+                        box-shadow: none;
+                        min-width: 100%;
+                        border-top: 1px solid $border-color;
+
+                        .dropdown-item {
+                            padding: 0.7rem 1rem;
+                            font-size: 0.85rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// SMALL MOBILE (max-width: 480px)
+// ────────────────────────────────────────────────────────────────────────────
+@media (max-width: 480px) {
+    .nav {
+        padding: 0.6rem 0.8rem;
+
+        .nav-brand h1 {
+            font-size: 0.95rem;
+            letter-spacing: 0;
+        }
+
+        .hamburger {
+            .hamburger__line {
+                width: 20px;
+                height: 2px;
+                gap: 4px;
+            }
+        }
+
+        .nav-menu {
+            &--active {
+                max-height: 400px;
+            }
+
+            li a {
+                padding: 0.8rem 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            &.nav-user {
+                padding: 0.4rem 0.5rem;
+
+                .user-avatar {
+                    width: 28px;
+                    height: 28px;
+                    font-size: 0.8rem;
                 }
             }
         }
